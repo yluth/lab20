@@ -8,17 +8,18 @@ type image = float list list ;;
 
 type size = int * int ;;
 
+let filter (img : image) (condition : float -> float) =
+  List.map (fun row -> List.map (condition)row) img
+
 (* threshold threshold image -- image where pixels above the threshold
 value are black *)
 let threshold (img : image) (threshold : float) =
-  List.map (fun row -> List.map (fun pix -> if pix <= threshold then 0. else 1.)
-                                 row) img
+  filter img (fun pix -> if pix <= threshold then 0. else 1.)
 ;;
 
 (* dither max image: makes each pixel black or white based on its rgb value *)
 let dither (img : image) =
-  List.map(fun row -> List.map (fun pix -> if pix > Random.float 1.
-                                           then 1. else 0.) row) img
+  filter img (fun pix -> if pix > Random.float 1. then 1. else 0.)
 ;;
 
 (* show the image *)
